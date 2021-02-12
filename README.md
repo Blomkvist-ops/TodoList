@@ -34,5 +34,5 @@ _**Task Types:**_
 - As a user, I want to be able to delete a task from my to-do-list
 - As a user, I want to be able to classify different tasks in my to-do list
 - As a user, I want to be able to add brief description of each task
-- As a user, I want to be able to set hours that needed for finishing each task
+- As a user, I want to be able to set hours that needed to complete each task
 - As a user, I want to be able to set deadline of each task
