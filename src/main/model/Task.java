@@ -37,6 +37,12 @@ public class Task {
     }
 
     //MODIFIES: this
+    //EFFECTS: change type of this task
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    //MODIFIES: this
     //EFFECTS: set status of this task;
     //         status = 0 means this task hasn't started yet;
     //         status = 1 means this task is in progress;

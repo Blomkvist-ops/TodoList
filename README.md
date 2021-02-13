@@ -1,4 +1,4 @@
-# PinkFirst TodoList
+# Matrix TodoList
 
 ## Introduction
 
@@ -29,10 +29,10 @@ _**Task Types:**_
 ## User Stories
 
 - As a user, I want to be able to add a task to my to-do list
-- As a user, I want to be able to view the list of tasks on my to-do list
 - As a user, I want to be able to mark a task as complete on my to-do list
 - As a user, I want to be able to delete a task from my to-do-list
 - As a user, I want to be able to classify different tasks in my to-do list
 - As a user, I want to be able to add brief description of each task
 - As a user, I want to be able to set hours that needed to complete each task
 - As a user, I want to be able to set deadline of each task
+- As a user, I want to be able to see the number of incomplete and number of completed tasks on my to-do list

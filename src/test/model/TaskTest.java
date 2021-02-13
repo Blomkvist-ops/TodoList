@@ -18,6 +18,8 @@ class TaskTest {
        task.setDeadline(2021,3,1);
        task.setDescription("this is a simple task");
        assertEquals(0,task.getType());
+       task.setType(2);
+       assertEquals(2,task.getType());
        assertEquals("test task", task.getName());
        assertEquals("this is a simple task", task.getDescription());
        assertEquals(3, task.getHours());
