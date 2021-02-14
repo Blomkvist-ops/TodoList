@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Todolist {
 
@@ -11,7 +12,7 @@ public class Todolist {
     //MODIFIES: this
     //EFFECTS: construct a new todolist
     public Todolist() {
-        todolist = new ArrayList<Task>();
+        todolist = new ArrayList<>();
     }
 
     //MODIFIES: this
@@ -122,8 +123,8 @@ public class Todolist {
     //EFFECTS: returns true if the todolist contains the task
     public boolean containTask(String name) {
         boolean result = false;
-        for (int i = 0; i < todolist.size(); i++) {
-            if (name.equals(todolist.get(i).getName())) {
+        for (Task task : todolist) {
+            if (name.equals(task.getName())) {
                 result = true;
                 break;
             }
@@ -135,7 +136,7 @@ public class Todolist {
 
     //EFFECTS: view complete and incomplete tasks
     public List<String> viewTasks(int status) {
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         for (Task task: todolist) {
             if (status == task.getStatus()) {
                 result.add(task.getName());
@@ -146,12 +147,15 @@ public class Todolist {
 
     //EFFECTS: view complete and incomplete tasks
     public Task getTask(String name) {
-        Task result = new Task("",0);
+        Task result = new Task(null,0);
         for (Task task: todolist) {
-            if (name.equals(task.getName())) {
+            if (!Objects.equals(name, task.getName())) {
+                continue;
+            } else {
                 result = task;
                 break;
             }
+
         }
         return result;
     }

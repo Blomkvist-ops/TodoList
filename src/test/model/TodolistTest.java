@@ -45,6 +45,8 @@ public class TodolistTest {
         assertEquals(3,todolist.getNumberOfIncompleteTask());
         assertEquals(1,todolist.getNumberOfCompleteTask());
         assertTrue(result);
+        result = todolist.completeTask("ZZZ");
+        assertFalse(result);
 
     }
 
@@ -93,6 +95,18 @@ public class TodolistTest {
         assertEquals(3, todolist.getNumberOfAllTask());
         assertEquals(2, todolist.getNumberOfIncompleteTask());
         assertEquals(1, todolist.getNumberOfCompleteTask());
+    }
+
+    @Test
+    public void testContainTask() {
+        assertTrue(todolist.containTask("AAA"));
+        assertFalse(todolist.containTask("MMM"));
+    }
+
+    @Test
+    public void testGetTask() {
+        assertEquals("BBB", todolist.getTask("BBB").getName());
+        assertEquals(null, todolist.getTask("ZZZ").getName());
     }
 
 
