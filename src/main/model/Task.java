@@ -5,11 +5,11 @@ import java.util.Date;
 
 public class Task {
     String name;
-    int hours;
+    //int hours;
     String description;
     int type;
     int status;
-    Calendar deadline = Calendar.getInstance();
+    //Calendar deadline = Calendar.getInstance();
 
     //MODIFIES: this
     //EFFECTS: construct a new task;
@@ -24,11 +24,6 @@ public class Task {
 
     }
 
-    //MODIFIES: this
-    //EFFECTS: set hours needed to complete this task
-    public void setHours(int hours) {
-        this.hours = hours;
-    }
 
     //MODIFIES: this
     //EFFECTS: add description to this task
@@ -51,11 +46,7 @@ public class Task {
         this.status = status;
     }
 
-    //MODIFIES: this
-    //EFFECTS: set deadline for this task
-    public void setDeadline(int year, int month, int day) {
-        deadline.set(year, month, day);
-    }
+
 
     //EFFECTS: get the name of this task
     public String getName() {
@@ -79,17 +70,6 @@ public class Task {
         return status;
     }
 
-
-    //EFFECTS: get the time needed to complete this task
-    public int getHours() {
-        return hours;
-    }
-
-
-    //EFFECTS: get the deadline of this task
-    public Calendar getDeadline() {
-        return deadline;
-    }
 
 
 
