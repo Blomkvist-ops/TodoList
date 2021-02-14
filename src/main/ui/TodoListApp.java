@@ -148,10 +148,15 @@ public class TodoListApp {
     public void viewSingleTask() {
         System.out.println("please input the title of task you want to view");
         String name = input.nextLine();
-        Task result = todolist.getTask(name);
-        System.out.println("Task : " + name + ", Type: " + result.getType()
-                + ", Status: " + result.getStatus()
-                + ", Description: " + result.getDescription());
+        if (todolist.containTask(name)) {
+            Task result = todolist.getTask(name);
+
+            System.out.println("Task : " + name + ", Type: " + result.getType()
+                    + ", Status: " + result.getStatus()
+                    + ", Description: " + result.getDescription());
+        } else {
+            System.out.println("The todolist doesn't contain this task.");
+        }
 
     }
 

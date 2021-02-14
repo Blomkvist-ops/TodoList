@@ -96,6 +96,18 @@ public class TodolistTest {
         assertEquals("This is a nice task", todolist.getTask("AAA").getDescription());
     }
 
+    @Test
+    public void testGetNumberTask() {
+        assertEquals(4, todolist.getNumberOfAllTask());
+        assertEquals(4, todolist.getNumberOfIncompleteTask());
+        assertEquals(0, todolist.getNumberOfCompleteTask());
+        todolist.completeTask("AAA");
+        todolist.removeTask("BBB");
+        assertEquals(3, todolist.getNumberOfAllTask());
+        assertEquals(2, todolist.getNumberOfIncompleteTask());
+        assertEquals(1, todolist.getNumberOfCompleteTask());
+    }
+
 
 
 }
