@@ -5,11 +5,9 @@ import java.util.Date;
 
 public class Task {
     String name;
-    //int hours;
     String description;
     int type;
     int status;
-    //Calendar deadline = Calendar.getInstance();
 
     //MODIFIES: this
     //EFFECTS: construct a new task;
