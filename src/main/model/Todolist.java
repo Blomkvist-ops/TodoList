@@ -133,17 +133,6 @@ public class Todolist {
 
 
 
-    //EFFECTS: returns the titles of tasks of given type
-    public List<String> getTypeTasks(int type) {
-        List<String> result = new ArrayList<String>();
-        for (Task task: todolist) {
-            if (type == task.getType()) {
-                result.add(task.getName());
-            }
-        }
-        return result;
-    }
-
     //EFFECTS: view complete and incomplete tasks
     public List<String> viewTasks(int status) {
         List<String> result = new ArrayList<String>();

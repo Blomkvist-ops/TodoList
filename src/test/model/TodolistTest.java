@@ -62,19 +62,6 @@ public class TodolistTest {
         assertEquals(2,todolist.getNumberOfOngoingTask());
     }
 
-    @Test
-    public void testGetTypeTasks() {
-        todolist.addTask("EEE",1);
-        todolist.addTask("FFF",3);
-        todolist.addTask("GGG",0);
-        todolist.addTask("HHH",1);
-        List result = todolist.getTypeTasks(1);
-        assertEquals(3, result.size());
-        assertTrue(result.contains("BBB"));
-        assertTrue(result.contains("EEE"));
-        assertTrue(result.contains("HHH"));
-
-    }
 
     @Test
     public void testViewTasks() {
