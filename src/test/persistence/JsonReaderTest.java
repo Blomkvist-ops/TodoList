@@ -39,6 +39,8 @@ public class JsonReaderTest {
             Todolist tl = reader.read();
             assertEquals("My todolist", tl.getName());
             assertEquals(2, tl.getNumberOfAllTask());
+            assertEquals(0, tl.getTask("AAA").getType());
+            assertEquals(1, tl.getTask("BBB").getType());
         } catch (IOException e) {
             fail("Couldn't read from file");
         }
