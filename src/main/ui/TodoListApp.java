@@ -2,15 +2,26 @@ package ui;
 
 import model.Task;
 import model.Todolist;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class TodoListApp {
-    private Todolist todolist = new Todolist();
+    private static final String JSON_STORE = "./data/todolist.json";
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
+    private Todolist todolist;
     private Scanner input;
 
     // EFFECTS: runs todolist application
-    public TodoListApp() {
+    public TodoListApp() throws FileNotFoundException {
+        input = new Scanner(System.in);
+        todolist = new Todolist("My todolist");
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
         runTodolist();
     }
 
@@ -56,6 +67,10 @@ public class TodoListApp {
             viewTasks();
         } else if (command.equals("view single")) {
             viewSingleTask();
+        } else if (command.equals("s")) {
+            saveTodolist();
+        } else if (command.equals("l")) {
+            loadTodolist();
         } else {
             System.out.println("Selection not valid...");
         }
@@ -72,6 +87,8 @@ public class TodoListApp {
         System.out.println("\tview single -> view a single task");
         System.out.println("\tcomplete -> mark a task as complete");
         System.out.println("\tadd description -> add description to a task");
+        System.out.println("\ts -> save todolist to file");
+        System.out.println("\tl -> load todolist from file");
         System.out.println("\tquit -> quit the application");
     }
 
@@ -158,6 +175,29 @@ public class TodoListApp {
             System.out.println("The todolist doesn't contain this task.");
         }
 
+    }
+
+    // EFFECTS: saves the todolist to file
+    private void saveTodolist() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(todolist);
+            jsonWriter.close();
+            System.out.println("Saved " + todolist.getName() + " to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads todolist from file
+    private void loadTodolist() {
+        try {
+            todolist = jsonReader.read();
+            System.out.println("Loaded " + todolist.getName() + " from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
     }
 
 

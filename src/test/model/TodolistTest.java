@@ -3,7 +3,6 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,11 +13,16 @@ public class TodolistTest {
 
     @BeforeEach
     public void runBefore() {
-        todolist = new Todolist();
+        todolist = new Todolist("Testlist");
         todolist.addTask("AAA", 0);
         todolist.addTask("BBB", 1);
         todolist.addTask("CCC", 2);
         todolist.addTask("DDD", 3);
+    }
+
+    @Test
+    public void testListName() {
+        assertEquals("Testlist", todolist.getName());
     }
 
     @Test

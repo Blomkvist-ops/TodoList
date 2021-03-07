@@ -1,17 +1,23 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Todolist {
+public class Todolist implements Writable {
 
+    String listName;
     ArrayList<Task> todolist;
 
 
     //MODIFIES: this
     //EFFECTS: construct a new todolist
-    public Todolist() {
+    public Todolist(String listName) {
+        this.listName = listName;
         todolist = new ArrayList<>();
     }
 
@@ -161,5 +167,24 @@ public class Todolist {
     }
 
 
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("listName", listName);
+        json.put("todolist", tasksToJson());
+        return json;
+    }
 
+    private JSONArray tasksToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Task t : todolist) {
+            jsonArray.put(t.toJson());
+        }
+
+        return jsonArray;
+    }
+
+    public String getName() {
+        return listName;
+    }
 }

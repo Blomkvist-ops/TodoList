@@ -1,9 +1,9 @@
 package model;
 
-import java.util.Calendar;
-import java.util.Date;
+import org.json.JSONObject;
+import persistence.Writable;
 
-public class Task {
+public class Task implements Writable {
     String name;
     String description;
     int type;
@@ -69,7 +69,12 @@ public class Task {
     }
 
 
-
-
-
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("description", description);
+        json.put("type", Integer.toString(type));
+        json.put("status", Integer.toString(status));
+        return json;
+    }
 }

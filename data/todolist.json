@@ -1,0 +1,16 @@
+{
+    "listName": "My todolist",
+    "todolist": [
+        {
+            "name": "aaa",
+            "description": "ttt",
+            "type": "0",
+            "status": "0"
+        },
+        {
+            "name": "ccc",
+            "type": "3",
+            "status": "0"
+        }
+    ]
+}
