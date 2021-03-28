@@ -5,25 +5,400 @@ import model.Todolist;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TodoListApp {
     private static final String JSON_STORE = "./data/todolist.json";
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
-    private Todolist todolist;
     private Scanner input;
+    private JFrame frame;
+    private Todolist todolist = new Todolist("my todolist");
+    private JPanel mainPanel = new JPanel();
+    private static final Integer WIDTH = 800;
+    private static final Integer HEIGHT = 500;
+    private JTextField nameText = new JTextField(20);
+    private JTextField  typeText = new JTextField(20);
+    private JTextArea detailText = new JTextArea();
+    private JButton btnAdd = new JButton("Add");    //创建JButton对象
+    private JButton btnDel = new JButton("Delete");
+    private JButton btnSave = new JButton("Save");
+    private JButton btnLoad = new JButton("Load");
+    private JButton btnView = new JButton("View");
+    private JButton btnQuit = new JButton("Quit");
 
     // EFFECTS: runs todolist application
     public TodoListApp() throws FileNotFoundException {
+        init();
+        createGui();
+
+    }
+
+    // MODIFIES: this
+    // EFFECTS: initializes the to-do list and the menu bar
+    private void init() {
         input = new Scanner(System.in);
         todolist = new Todolist("My todolist");
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
-        runTodolist();
+
     }
+
+
+    // MODIFIES: this
+    // EFFECTS: create a Gui Frame
+    public void createGui() {
+        frame = new JFrame("Todo List Application");
+        frame.setSize(WIDTH,HEIGHT);    //设置窗口显示尺寸
+        JLabel title = new JLabel(todolist.getName());
+        title.setHorizontalAlignment(SwingConstants.CENTER);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    //置窗口是否可以关闭
+        //Container c = frame.getContentPane();    //获取当前窗口的内容窗格
+        mainPanel.setBackground(Color.white);
+        mainPanel.setLayout(null);
+        setButtons();
+        frame.add(mainPanel);
+        frame.setVisible(true);    //设置窗口是否可见
+
+    }
+
+    public void setButtons() {
+        btnAdd.setBounds(300,100,200,35);
+        btnDel.setBounds(300,150,200,35);
+        btnSave.setBounds(300,200,200,35);
+        btnLoad.setBounds(300,250,200,35);
+        btnView.setBounds(300, 300,200,35);
+        btnQuit.setBounds(300, 350,200,35);
+        mainPanel.add(btnAdd);
+        mainPanel.add(btnDel);
+        mainPanel.add(btnSave);
+        mainPanel.add(btnLoad);
+        mainPanel.add(btnView);
+        mainPanel.add(btnQuit);
+        btnAdd.addActionListener(e -> addATask());
+        btnDel.addActionListener(e -> deleteATask());
+        btnSave.addActionListener(e -> saveTasks());
+        btnLoad.addActionListener(e -> loadTasks());
+        btnView.addActionListener(e -> viewTaskPanel());
+    }
+
+    private void viewTaskPanel() {
+        JFrame viewTaskFrame = new JFrame("View tasks by type");
+        viewTaskFrame.setLocationRelativeTo(frame);
+        JButton nextButton = new JButton("Next");
+        JButton backButton = new JButton("Cancel");
+        viewTaskFrame.setLayout(new BorderLayout());
+        nextButton.addActionListener(e -> {
+            viewTasksByType(typeText.getText());
+            viewTaskFrame.dispose();
+        });
+        backButton.addActionListener(e -> viewTaskFrame.dispose());
+        JPanel lowerPanel = new JPanel();
+        JPanel centerPanel2 = new JPanel();
+        setViewTaskCenterPanel(centerPanel2);
+        lowerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        lowerPanel.add(nextButton);
+        lowerPanel.add(backButton);
+        viewTaskFrame.add(centerPanel2,BorderLayout.CENTER);
+        viewTaskFrame.add(lowerPanel,BorderLayout.SOUTH);
+        viewTaskFrame.setSize(350,200);
+        viewTaskFrame.setVisible(true);
+
+    }
+
+    private JPanel setViewTaskCenterPanel(JPanel centerPanel) {
+        JLabel typeLabel = new JLabel("Type");
+        centerPanel.setLayout(null);
+        typeText.setBounds(100,45,165,20);
+        typeLabel.setBounds(10,45,165,20);
+        centerPanel.add(typeText);
+        centerPanel.add(typeLabel);
+        return centerPanel;
+    }
+
+
+    private void viewTasksByType(String type) {
+        JFrame viewTaskFrame = new JFrame("View Tasks");
+        JLabel viewTaskLabel = getViewTaskLabel(type);
+        viewTaskLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        viewTaskFrame.setLocationRelativeTo(frame);
+        viewTaskFrame.setLayout(new BorderLayout());
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(e -> viewTaskFrame.dispose());
+        JPanel centerPanel = getToDoListPanelByStatus(type);
+        JPanel lowerPanel = new JPanel();
+        lowerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        lowerPanel.add(backButton);
+        viewTaskFrame.add(viewTaskLabel,BorderLayout.NORTH);
+        viewTaskFrame.add(centerPanel,BorderLayout.CENTER);
+        viewTaskFrame.add(lowerPanel,BorderLayout.SOUTH);
+        viewTaskFrame.setSize(600,350);
+        viewTaskFrame.setVisible(true);
+    }
+
+    // MODIFIES: JPanel
+    // EFFECTS: return a JPanel containing a table of all incomplete or all complete tasks
+    private JPanel getToDoListPanelByStatus(String type) {
+        JPanel panel = new JPanel();
+        DefaultTableModel tableModel = new DefaultTableModel();
+        JTable table = new JTable(tableModel) { public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tableModel.setRowCount(0);
+        tableModel.setColumnIdentifiers(new Object[]{"Name","Description","Status"});
+        ArrayList<Task> tasks = todolist.getTasks();
+        int intType = Integer.valueOf(type).intValue();
+        tasks.forEach(task -> {
+            if (intType == task.getType()) {
+                tableModel.addRow(new Object[]{task.getName(),task.getDescription(), task.getStatus()});
+            }
+        });
+        table.setRowHeight(30);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
+        panel.add(new JScrollPane(table) {
+            public Dimension getPreferredSize() {
+                return new Dimension(450, 250);
+            }
+        });
+        return panel;
+    }
+
+    private JLabel getViewTaskLabel(String type) {
+        JLabel viewTaskLabel = new JLabel("view tasks.");
+        if (type == "0") {
+            viewTaskLabel.setText("Important and urgent");
+        } else if (type == "1") {
+            viewTaskLabel.setText("Important but not urgent");
+        } else if (type == "2") {
+            viewTaskLabel.setText("not important but urgent");
+        } else if (type == "3") {
+            viewTaskLabel.setText("not important and not urgent");
+        }
+
+        return viewTaskLabel;
+    }
+
+
+    private void loadTasks() {
+        //playSound("popOut");
+        JPanel panel = new JPanel();
+        loadTodolist();
+        JOptionPane.showMessageDialog(panel,"Loaded " + todolist.getName() + " from " + JSON_STORE,
+                "Successfully Loaded", JOptionPane.INFORMATION_MESSAGE);
+        showTaskFrame();
+    }
+
+    private void showTaskFrame() {
+        JFrame loadFrame = new JFrame("Load all tasks");
+        loadFrame.setLocationRelativeTo(frame);
+        JButton backButton = new JButton("Cancel");
+        loadFrame.setLayout(new BorderLayout());
+        backButton.addActionListener(e -> loadFrame.dispose());
+        JPanel lowerPanel =  new JPanel();
+        JPanel centerPanel = getToDoListPanel();
+        lowerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        lowerPanel.add(backButton);
+        loadFrame.add(centerPanel,BorderLayout.CENTER);
+        loadFrame.add(lowerPanel,BorderLayout.SOUTH);
+        loadFrame.setSize(650,323);
+        loadFrame.setVisible(true);
+    }
+
+
+    // MODIFIES: this, JPanel
+    // EFFECTS: return the center panel of the main frame, containing a table of to-do list
+    public JPanel getToDoListPanel() {
+        JPanel panel = new JPanel();
+        if (todolist.getNumberOfAllTask() == 0) {
+            JLabel label = new JLabel("There is no task yet.");
+            panel.add(label);
+        } else {
+            JTable table = getTaskTable();
+            panel.add(new JScrollPane(table) {
+                public Dimension getPreferredSize() {
+                    return new Dimension(650, 323);
+                }
+            });
+        }
+        return panel;
+    }
+
+
+    // MODIFIES: this, JTable
+    // EFFECTS: return a JTable of all to-do list
+
+    private JTable getTaskTable() {
+        DefaultTableModel tableModel = new DefaultTableModel();
+        JTable table = new JTable(tableModel) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tableModel.setColumnIdentifiers(new Object[]{"Name","Description","Type"});
+        ArrayList<Task> tasks = todolist.getTasks();
+        tasks.forEach(task -> tableModel.addRow(new Object[]{task.getName(),
+                task.getDescription(),task.getType()}));
+        table.setRowHeight(30);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
+
+        return table;
+    }
+
+    private void saveTasks() {
+        JOptionPane panel = new JOptionPane();
+        int save = JOptionPane.showConfirmDialog(panel,
+                "Going to save the list with name \"" + todolist.getName() + "\". Do you confirm?",
+                "Save Confirm", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (save == 0) {
+            //playSound("click");
+            saveTodolist();
+            //JOptionPane.showMessageDialog(panel,"Saved " + todolist.getName() + " to " + JSON_STORE,
+            //        "Successfully Saved", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private void showNewNameList() {
+        JOptionPane panel = new JOptionPane();
+        String name;
+        name = JOptionPane.showInputDialog(panel,"Please enter the new name of the list.",
+                "Rename The List", JOptionPane.INFORMATION_MESSAGE);
+        if (! (name == null)) {
+            //playSound("click");
+            doChangeListName(name);
+        }
+    }
+
+    private void doChangeListName(String name) {
+        todolist.changeName(name);
+        refreshFrame();
+    }
+
+    private void deleteATask() {
+        JFrame deleteTaskFrame = new JFrame("Delete a task");
+        deleteTaskFrame.setLocationRelativeTo(frame);
+        JButton nextButton = new JButton("Next");
+        JButton backButton = new JButton("Cancel");
+        deleteTaskFrame.setLayout(new BorderLayout());
+        nextButton.addActionListener(e -> {
+            deleteAPickedTask(nameText.getText());
+            deleteTaskFrame.dispose();
+        });
+        backButton.addActionListener(e -> deleteTaskFrame.dispose());
+        JPanel lowerPanel = new JPanel();
+        JPanel centerPanel = new JPanel();
+        setDeleteCenterPanel(centerPanel);
+        lowerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        lowerPanel.add(nextButton);
+        lowerPanel.add(backButton);
+        deleteTaskFrame.add(centerPanel,BorderLayout.CENTER);
+        deleteTaskFrame.add(lowerPanel,BorderLayout.SOUTH);
+        deleteTaskFrame.setSize(350,200);
+        deleteTaskFrame.setVisible(true);
+
+    }
+
+    private JPanel setDeleteCenterPanel(JPanel centerPanel) {
+        JLabel nameLabel = new JLabel("Delete Name");
+        centerPanel.setLayout(null);
+        nameText.setBounds(100,20,165,20);
+        nameLabel.setBounds(10,20,165,20);
+        centerPanel.add(nameText);
+        centerPanel.add(nameLabel);
+        return centerPanel;
+    }
+
+    private void deleteAPickedTask(String name) {
+        try {
+
+            todolist.removeTask(name);
+
+        } catch (Exception e) {
+            System.out.println("error");
+        }
+
+        refreshFrame();
+
+    }
+
+    public void addATask() {
+        JFrame addTaskFrame = new JFrame("Add a task");
+        addTaskFrame.setLocationRelativeTo(frame);
+        JButton nextButton = new JButton("Next");
+        JButton backButton = new JButton("Cancel");
+        addTaskFrame.setLayout(new BorderLayout());
+        nextButton.addActionListener(e -> {
+            addANewTask(nameText.getText(), typeText.getText(), detailText.getText());
+            addTaskFrame.dispose();
+        });
+        backButton.addActionListener(e -> addTaskFrame.dispose());
+        JPanel lowerPanel = new JPanel();
+        JPanel centerPanel = new JPanel();
+        setAddCenterPanel(centerPanel);
+        lowerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        lowerPanel.add(nextButton);
+        lowerPanel.add(backButton);
+        addTaskFrame.add(centerPanel,BorderLayout.CENTER);
+        addTaskFrame.add(lowerPanel,BorderLayout.SOUTH);
+        addTaskFrame.setSize(350,200);
+        addTaskFrame.setVisible(true);
+
+    }
+
+    public JPanel setAddCenterPanel(JPanel centerPanel) {
+        setTextField();
+        JLabel nameLabel = new JLabel("Name");
+        JLabel typeLabel = new JLabel("Type");
+        JLabel descriptionLabel = new JLabel("Description");
+        centerPanel.setLayout(null);
+        nameText.setBounds(100,20,165,20);
+        typeText.setBounds(100,45,165,20);
+        detailText.setBounds(100,70,165,50);
+        nameLabel.setBounds(10,20,165,20);
+        typeLabel.setBounds(10,45,165,20);
+        descriptionLabel.setBounds(10,70,165,50);
+        centerPanel.add(nameText);
+        centerPanel.add(typeText);
+        centerPanel.add(detailText);
+        centerPanel.add(nameLabel);
+        centerPanel.add(typeLabel);
+        centerPanel.add(descriptionLabel);
+        return centerPanel;
+    }
+
+
+
+    public void addANewTask(String name, String type, String description) {
+        try {
+            int intType = Integer.valueOf(type).intValue();
+            todolist.addTask(name, intType);
+            todolist.addDescription(name,description);
+        } catch (NumberFormatException e) {
+            System.out.println("format error");
+        }
+
+        refreshFrame();
+
+
+    }
+
+    public void setTextField() {
+
+        detailText.setColumns(20);
+        detailText.setRows(3);
+    }
+
+    public void refreshFrame() {
+        frame.dispose();
+        createGui();
+    }
+
 
     // MODIFIES: this
     // EFFECTS: processes user input

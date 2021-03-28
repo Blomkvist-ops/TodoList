@@ -187,4 +187,15 @@ public class Todolist implements Writable {
     public String getName() {
         return listName;
     }
+
+    // MODIFIES: this
+    // EFFECTS: replace the name of to-do list with a new name
+    public void changeName(String name) {
+        this.listName = name;
+    }
+
+    // EFFECTS: return the list of tasks in the to-do list
+    public ArrayList<Task> getTasks() {
+        return todolist;
+    }
 }

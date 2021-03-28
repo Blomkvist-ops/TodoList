@@ -47,7 +47,7 @@ public class JsonReader {
         return tl;
     }
 
-    // MODIFIES: wr
+    // MODIFIES: tl
     // EFFECTS: parses thingies from JSON object and adds them to todolist
     private void addTasks(Todolist tl, JSONObject jsonObject) {
         JSONArray jsonArray = jsonObject.getJSONArray("todolist");
@@ -57,7 +57,7 @@ public class JsonReader {
         }
     }
 
-    // MODIFIES: wr
+    // MODIFIES: tl
     // EFFECTS: parses thingy from JSON object and adds it to todolist
     private void addTask(Todolist tl, JSONObject jsonObject) {
         String name = jsonObject.getString("name");
