@@ -168,7 +168,7 @@ public class TodoListApp {
         viewTaskFrame.setLayout(new BorderLayout());
         JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> viewTaskFrame.dispose());
-        JPanel centerPanel = getToDoListPanelByStatus(type);
+        JPanel centerPanel = getToDoListPanelByType(type);
         JPanel lowerPanel = new JPanel();
         lowerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         lowerPanel.add(backButton);
@@ -182,7 +182,7 @@ public class TodoListApp {
 
     // MODIFIES: JPanel
     // EFFECTS: return a JPanel containing a table of all incomplete or all complete tasks
-    public JPanel getToDoListPanelByStatus(String type) {
+    public JPanel getToDoListPanelByType(String type) {
         JPanel panel = new JPanel();
         DefaultTableModel tableModel = new DefaultTableModel();
         JTable table = new JTable(tableModel) { public boolean isCellEditable(int row, int column) {
@@ -272,6 +272,9 @@ public class TodoListApp {
                 }
             });
         }
+
+
+
         return panel;
     }
 
