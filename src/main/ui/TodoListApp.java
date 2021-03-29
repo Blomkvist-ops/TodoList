@@ -7,9 +7,14 @@ import persistence.JsonWriter;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.*;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -31,7 +36,6 @@ public class TodoListApp {
     private JButton btnSave = new JButton("Save");
     private JButton btnLoad = new JButton("Load");
     private JButton btnView = new JButton("View");
-    private JButton btnQuit = new JButton("Quit");
 
     // EFFECTS: runs todolist application
     public TodoListApp() throws FileNotFoundException {
@@ -76,13 +80,11 @@ public class TodoListApp {
         btnSave.setBounds(300,200,200,35);
         btnLoad.setBounds(300,250,200,35);
         btnView.setBounds(300, 300,200,35);
-        btnQuit.setBounds(300, 350,200,35);
         mainPanel.add(btnAdd);
         mainPanel.add(btnDel);
         mainPanel.add(btnSave);
         mainPanel.add(btnLoad);
         mainPanel.add(btnView);
-        mainPanel.add(btnQuit);
         btnAdd.addActionListener(e -> addATask());
         btnDel.addActionListener(e -> deleteATask());
         btnSave.addActionListener(e -> saveTasks());
@@ -116,6 +118,31 @@ public class TodoListApp {
         viewTaskFrame.setSize(350,200);
         viewTaskFrame.setVisible(true);
 
+    }
+
+
+    public void playSound(String choice) {
+        File errorAudio = new File("./data/errorSound.wav");
+        File clickAudio = new File("./data/clickSound.wav");
+        File popOutAudio = new File("./data/popOutSound.wav");
+        URL url = null;
+        try {
+            switch (choice) {
+                case "error":
+                    url = errorAudio.toURI().toURL();
+                    break;
+                case "click":
+                    url = clickAudio.toURI().toURL();
+                    break;
+                case "popOut":
+                    url = popOutAudio.toURI().toURL();
+                    break;
+            }
+            AudioClip sound = Applet.newAudioClip(url);
+            sound.play();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
     // MODIFIES: this
@@ -163,7 +190,7 @@ public class TodoListApp {
             }
         };
         tableModel.setRowCount(0);
-        tableModel.setColumnIdentifiers(new Object[]{"Name","Description","Status"});
+        tableModel.setColumnIdentifiers(new Object[]{"Name","Description","Type"});
         ArrayList<Task> tasks = todolist.getTasks();
         int intType = Integer.valueOf(type).intValue();
         tasks.forEach(task -> {
@@ -202,11 +229,11 @@ public class TodoListApp {
 
     // EFFECTS: load tasks from previous file
     public void loadTasks() {
-        //playSound("popOut");
+        playSound("popOut");
         JPanel panel = new JPanel();
         loadTodolist();
-        JOptionPane.showMessageDialog(panel,"Loaded " + todolist.getName() + " from " + JSON_STORE,
-                "Successfully Loaded", JOptionPane.INFORMATION_MESSAGE);
+        //JOptionPane.showMessageDialog(panel,"Loaded " + todolist.getName() + " from " + JSON_STORE,
+        //       "Successfully Loaded", JOptionPane.INFORMATION_MESSAGE);
         showTaskFrame();
     }
 
@@ -259,6 +286,7 @@ public class TodoListApp {
                 return false;
             }
         };
+        tableModel.setRowCount(0);
         tableModel.setColumnIdentifiers(new Object[]{"Name","Description","Type"});
         ArrayList<Task> tasks = todolist.getTasks();
         tasks.forEach(task -> tableModel.addRow(new Object[]{task.getName(),
@@ -273,15 +301,16 @@ public class TodoListApp {
     // MODIFIES: this
     // EFFECTS: save todolist to a json file
     public void saveTasks() {
-        JOptionPane panel = new JOptionPane();
-        int save = JOptionPane.showConfirmDialog(panel,
+        playSound("popOut");
+        JOptionPane savePanel = new JOptionPane();
+        int save = JOptionPane.showConfirmDialog(savePanel,
                 "Going to save the list with name \"" + todolist.getName() + "\". Do you confirm?",
                 "Save Confirm", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (save == 0) {
-            //playSound("click");
+            playSound("click");
             saveTodolist();
-            //JOptionPane.showMessageDialog(panel,"Saved " + todolist.getName() + " to " + JSON_STORE,
-            //        "Successfully Saved", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(savePanel,"Saved " + todolist.getName() + " to " + JSON_STORE,
+                    "Successfully Saved", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 

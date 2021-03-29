@@ -2,7 +2,7 @@
     "listName": "My todolist",
     "todolist": [
         {
-            "name": "qqq",
+            "name": "aaa",
             "description": "",
             "type": "1",
             "status": "0"
@@ -10,7 +10,7 @@
         {
             "name": "bbb",
             "description": "",
-            "type": "2",
+            "type": "0",
             "status": "0"
         }
     ]
