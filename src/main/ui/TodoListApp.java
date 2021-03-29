@@ -68,6 +68,8 @@ public class TodoListApp {
 
     }
 
+    // MODIFIES: this
+    // EFFECTS: set the positions of buttons of a Gui Frame
     public void setButtons() {
         btnAdd.setBounds(300,100,200,35);
         btnDel.setBounds(300,150,200,35);
@@ -88,7 +90,11 @@ public class TodoListApp {
         btnView.addActionListener(e -> viewTaskPanel());
     }
 
-    private void viewTaskPanel() {
+
+
+    // MODIFIES: this
+    // EFFECTS: get the panel of viewing tasks by type
+    public void viewTaskPanel() {
         JFrame viewTaskFrame = new JFrame("View tasks by type");
         viewTaskFrame.setLocationRelativeTo(frame);
         JButton nextButton = new JButton("Next");
@@ -112,7 +118,9 @@ public class TodoListApp {
 
     }
 
-    private JPanel setViewTaskCenterPanel(JPanel centerPanel) {
+    // MODIFIES: this
+    // EFFECTS: get the panel of viewing tasks by type
+    public JPanel setViewTaskCenterPanel(JPanel centerPanel) {
         JLabel typeLabel = new JLabel("Type");
         centerPanel.setLayout(null);
         typeText.setBounds(100,45,165,20);
@@ -123,7 +131,9 @@ public class TodoListApp {
     }
 
 
-    private void viewTasksByType(String type) {
+    // MODIFIES: this
+    // EFFECTS: get the panel of viewing tasks by type
+    public void viewTasksByType(String type) {
         JFrame viewTaskFrame = new JFrame("View Tasks");
         JLabel viewTaskLabel = getViewTaskLabel(type);
         viewTaskLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -142,9 +152,10 @@ public class TodoListApp {
         viewTaskFrame.setVisible(true);
     }
 
+
     // MODIFIES: JPanel
     // EFFECTS: return a JPanel containing a table of all incomplete or all complete tasks
-    private JPanel getToDoListPanelByStatus(String type) {
+    public JPanel getToDoListPanelByStatus(String type) {
         JPanel panel = new JPanel();
         DefaultTableModel tableModel = new DefaultTableModel();
         JTable table = new JTable(tableModel) { public boolean isCellEditable(int row, int column) {
@@ -170,7 +181,10 @@ public class TodoListApp {
         return panel;
     }
 
-    private JLabel getViewTaskLabel(String type) {
+
+    // MODIFIES: JLabel
+    // EFFECTS: return a JLabel of given type
+    public JLabel getViewTaskLabel(String type) {
         JLabel viewTaskLabel = new JLabel("view tasks.");
         if (type == "0") {
             viewTaskLabel.setText("Important and urgent");
@@ -186,7 +200,8 @@ public class TodoListApp {
     }
 
 
-    private void loadTasks() {
+    // EFFECTS: load tasks from previous file
+    public void loadTasks() {
         //playSound("popOut");
         JPanel panel = new JPanel();
         loadTodolist();
@@ -195,7 +210,10 @@ public class TodoListApp {
         showTaskFrame();
     }
 
-    private void showTaskFrame() {
+
+    // MODIFIES: this
+    // EFFECTS: set the frame of loading tasks
+    public void showTaskFrame() {
         JFrame loadFrame = new JFrame("Load all tasks");
         loadFrame.setLocationRelativeTo(frame);
         JButton backButton = new JButton("Cancel");
@@ -231,10 +249,10 @@ public class TodoListApp {
     }
 
 
-    // MODIFIES: this, JTable
+    // MODIFIES: this
     // EFFECTS: return a JTable of all to-do list
 
-    private JTable getTaskTable() {
+    public JTable getTaskTable() {
         DefaultTableModel tableModel = new DefaultTableModel();
         JTable table = new JTable(tableModel) {
             public boolean isCellEditable(int row, int column) {
@@ -251,7 +269,10 @@ public class TodoListApp {
         return table;
     }
 
-    private void saveTasks() {
+
+    // MODIFIES: this
+    // EFFECTS: save todolist to a json file
+    public void saveTasks() {
         JOptionPane panel = new JOptionPane();
         int save = JOptionPane.showConfirmDialog(panel,
                 "Going to save the list with name \"" + todolist.getName() + "\". Do you confirm?",
@@ -264,23 +285,10 @@ public class TodoListApp {
         }
     }
 
-    private void showNewNameList() {
-        JOptionPane panel = new JOptionPane();
-        String name;
-        name = JOptionPane.showInputDialog(panel,"Please enter the new name of the list.",
-                "Rename The List", JOptionPane.INFORMATION_MESSAGE);
-        if (! (name == null)) {
-            //playSound("click");
-            doChangeListName(name);
-        }
-    }
 
-    private void doChangeListName(String name) {
-        todolist.changeName(name);
-        refreshFrame();
-    }
-
-    private void deleteATask() {
+    // MODIFIES: this
+    // EFFECTS: delete a task by name
+    public void deleteATask() {
         JFrame deleteTaskFrame = new JFrame("Delete a task");
         deleteTaskFrame.setLocationRelativeTo(frame);
         JButton nextButton = new JButton("Next");
@@ -304,7 +312,9 @@ public class TodoListApp {
 
     }
 
-    private JPanel setDeleteCenterPanel(JPanel centerPanel) {
+    // MODIFIES: this, JLabel
+    // EFFECTS: set the panel of deleting tasks
+    public JPanel setDeleteCenterPanel(JPanel centerPanel) {
         JLabel nameLabel = new JLabel("Delete Name");
         centerPanel.setLayout(null);
         nameText.setBounds(100,20,165,20);
@@ -314,7 +324,9 @@ public class TodoListApp {
         return centerPanel;
     }
 
-    private void deleteAPickedTask(String name) {
+    // MODIFIES: this
+    // EFFECTS: delete a task by given name
+    public void deleteAPickedTask(String name) {
         try {
 
             todolist.removeTask(name);
@@ -327,6 +339,8 @@ public class TodoListApp {
 
     }
 
+    // MODIFIES: this
+    // EFFECTS: add a new task to todolist
     public void addATask() {
         JFrame addTaskFrame = new JFrame("Add a task");
         addTaskFrame.setLocationRelativeTo(frame);
@@ -351,6 +365,8 @@ public class TodoListApp {
 
     }
 
+    // MODIFIES: this, JPanel
+    // EFFECTS: set the panel of adding a task
     public JPanel setAddCenterPanel(JPanel centerPanel) {
         setTextField();
         JLabel nameLabel = new JLabel("Name");
@@ -372,8 +388,8 @@ public class TodoListApp {
         return centerPanel;
     }
 
-
-
+    // MODIFIES: this
+    // EFFECTS: add a new task to todolist
     public void addANewTask(String name, String type, String description) {
         try {
             int intType = Integer.valueOf(type).intValue();
@@ -388,6 +404,8 @@ public class TodoListApp {
 
     }
 
+    // MODIFIES: this
+    // EFFECTS: set the range of a text field
     public void setTextField() {
 
         detailText.setColumns(20);
