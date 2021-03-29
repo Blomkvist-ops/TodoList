@@ -2,15 +2,15 @@
     "listName": "My todolist",
     "todolist": [
         {
-            "name": "aaaa",
+            "name": "qqq",
             "description": "",
             "type": "1",
             "status": "0"
         },
         {
-            "name": "bbbb",
+            "name": "bbb",
             "description": "",
-            "type": "0",
+            "type": "2",
             "status": "0"
         }
     ]

@@ -157,7 +157,7 @@ public class TodoListApp {
         int intType = Integer.valueOf(type).intValue();
         tasks.forEach(task -> {
             if (intType == task.getType()) {
-                tableModel.addRow(new Object[]{task.getName(),task.getDescription(), task.getStatus()});
+                tableModel.addRow(new Object[]{task.getName(),task.getDescription(), task.getType()});
             }
         });
         table.setRowHeight(30);
