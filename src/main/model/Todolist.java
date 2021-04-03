@@ -184,6 +184,20 @@ public class Todolist implements Writable {
         return jsonArray;
     }
 
+    public int[] countStatus() {
+        int[] countList = {0, 0};
+        todolist.forEach(task -> {
+            if (task.getStatus() == 0) {
+                countList[0] += 1;
+            } else if (task.getStatus() == 1) {
+                countList[1] += 1;
+            } else {
+                countList[2] += 1;
+            }
+        });
+        return countList;
+    }
+
     public String getName() {
         return listName;
     }

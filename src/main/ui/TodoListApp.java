@@ -36,6 +36,7 @@ public class TodoListApp {
     private JButton btnSave = new JButton("Save");
     private JButton btnLoad = new JButton("Load");
     private JButton btnView = new JButton("View");
+    boolean flag = true;
 
     // EFFECTS: runs todolist application
     public TodoListApp() throws FileNotFoundException {
@@ -63,14 +64,18 @@ public class TodoListApp {
         JLabel title = new JLabel(todolist.getName());
         title.setHorizontalAlignment(SwingConstants.CENTER);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    //置窗口是否可以关闭
-        //Container c = frame.getContentPane();    //获取当前窗口的内容窗格
         mainPanel.setBackground(Color.white);
         mainPanel.setLayout(null);
-        setButtons();
+        if (flag) {
+            setButtons();
+            flag = false;
+        }
+
         frame.add(mainPanel);
         frame.setVisible(true);    //设置窗口是否可见
 
     }
+
 
     // MODIFIES: this
     // EFFECTS: set the positions of buttons of a Gui Frame
@@ -88,7 +93,7 @@ public class TodoListApp {
         btnAdd.addActionListener(e -> addATask());
         btnDel.addActionListener(e -> deleteATask());
         btnSave.addActionListener(e -> saveTasks());
-        btnLoad.addActionListener(e -> loadTasks());
+        btnLoad.addActionListener(e -> loadAllTasks());
         btnView.addActionListener(e -> viewTaskPanel());
     }
 
@@ -179,6 +184,25 @@ public class TodoListApp {
         viewTaskFrame.setVisible(true);
     }
 
+    // MODIFIES: this
+    // EFFECTS: get the panel of viewing tasks by type
+    public void loadAllTasks() {
+        JFrame viewTaskFrame = new JFrame("Load all Tasks");
+        viewTaskFrame.setLocationRelativeTo(frame);
+        viewTaskFrame.setLayout(new BorderLayout());
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(e -> viewTaskFrame.dispose());
+        JPanel centerPanel = getWholeToDoList();
+        JPanel lowerPanel = new JPanel();
+        lowerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        lowerPanel.add(backButton);
+        //viewTaskFrame.add(viewTaskLabel,BorderLayout.NORTH);
+        viewTaskFrame.add(centerPanel,BorderLayout.CENTER);
+        viewTaskFrame.add(lowerPanel,BorderLayout.SOUTH);
+        viewTaskFrame.setSize(600,350);
+        viewTaskFrame.setVisible(true);
+    }
+
 
     // MODIFIES: JPanel
     // EFFECTS: return a JPanel containing a table of all incomplete or all complete tasks
@@ -197,6 +221,32 @@ public class TodoListApp {
             if (intType == task.getType()) {
                 tableModel.addRow(new Object[]{task.getName(),task.getDescription(), task.getType()});
             }
+        });
+        table.setRowHeight(30);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
+        panel.add(new JScrollPane(table) {
+            public Dimension getPreferredSize() {
+                return new Dimension(450, 250);
+            }
+        });
+        return panel;
+    }
+
+    // MODIFIES: JPanel
+    // EFFECTS: return a JPanel containing a table of all incomplete or all complete tasks
+    public JPanel getWholeToDoList() {
+        JPanel panel = new JPanel();
+        DefaultTableModel tableModel = new DefaultTableModel();
+        JTable table = new JTable(tableModel) { public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tableModel.setRowCount(0);
+        tableModel.setColumnIdentifiers(new Object[]{"Name","Description","Type"});
+        ArrayList<Task> tasks = todolist.getTasks();
+        tasks.forEach(task -> {
+            tableModel.addRow(new Object[]{task.getName(),task.getDescription(), task.getType()});
+
         });
         table.setRowHeight(30);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
@@ -227,16 +277,6 @@ public class TodoListApp {
     }
 
 
-    // EFFECTS: load tasks from previous file
-    public void loadTasks() {
-        playSound("popOut");
-        JPanel panel = new JPanel();
-        loadTodolist();
-        //JOptionPane.showMessageDialog(panel,"Loaded " + todolist.getName() + " from " + JSON_STORE,
-        //       "Successfully Loaded", JOptionPane.INFORMATION_MESSAGE);
-        showTaskFrame();
-    }
-
 
     // MODIFIES: this
     // EFFECTS: set the frame of loading tasks
@@ -247,17 +287,18 @@ public class TodoListApp {
         loadFrame.setLayout(new BorderLayout());
         backButton.addActionListener(e -> loadFrame.dispose());
         JPanel lowerPanel =  new JPanel();
-        JPanel centerPanel = getToDoListPanel();
+        JPanel centerPanel = new JPanel();
         lowerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         lowerPanel.add(backButton);
         loadFrame.add(centerPanel,BorderLayout.CENTER);
         loadFrame.add(lowerPanel,BorderLayout.SOUTH);
         loadFrame.setSize(650,323);
         loadFrame.setVisible(true);
+
     }
 
 
-    // MODIFIES: this, JPanel
+    // MODIFIES: this, JPanel !!!
     // EFFECTS: return the center panel of the main frame, containing a table of to-do list
     public JPanel getToDoListPanel() {
         JPanel panel = new JPanel();
@@ -274,7 +315,6 @@ public class TodoListApp {
         }
 
 
-
         return panel;
     }
 
@@ -283,6 +323,7 @@ public class TodoListApp {
     // EFFECTS: return a JTable of all to-do list
 
     public JTable getTaskTable() {
+        JPanel panel = new JPanel();
         DefaultTableModel tableModel = new DefaultTableModel();
         JTable table = new JTable(tableModel) {
             public boolean isCellEditable(int row, int column) {
@@ -292,12 +333,20 @@ public class TodoListApp {
         tableModel.setRowCount(0);
         tableModel.setColumnIdentifiers(new Object[]{"Name","Description","Type"});
         ArrayList<Task> tasks = todolist.getTasks();
-        tasks.forEach(task -> tableModel.addRow(new Object[]{task.getName(),
-                task.getDescription(),task.getType()}));
+        tasks.forEach(task -> {
+            tableModel.addRow(new Object[]{task.getName(),task.getDescription(), task.getType()});
+        });
         table.setRowHeight(30);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
+        panel.add(new JScrollPane(table) {
+            public Dimension getPreferredSize() {
+                return new Dimension(450, 250);
+            }
+        });
 
         return table;
+
+
     }
 
 
@@ -375,6 +424,7 @@ public class TodoListApp {
     // EFFECTS: add a new task to todolist
     public void addATask() {
         JFrame addTaskFrame = new JFrame("Add a task");
+        refreshText();
         addTaskFrame.setLocationRelativeTo(frame);
         JButton nextButton = new JButton("Next");
         JButton backButton = new JButton("Cancel");
@@ -382,6 +432,7 @@ public class TodoListApp {
         nextButton.addActionListener(e -> {
             addANewTask(nameText.getText(), typeText.getText(), detailText.getText());
             addTaskFrame.dispose();
+            System.out.println("dispose successfully");
         });
         backButton.addActionListener(e -> addTaskFrame.dispose());
         JPanel lowerPanel = new JPanel();
@@ -395,6 +446,14 @@ public class TodoListApp {
         addTaskFrame.setSize(350,200);
         addTaskFrame.setVisible(true);
 
+    }
+
+    // MODIFIES: this
+    // EFFECTS: refresh the test column
+    public void refreshText() {
+        nameText = new JTextField(20);
+        typeText = new JTextField(20);
+        detailText = new JTextArea();
     }
 
     // MODIFIES: this, JPanel
