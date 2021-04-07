@@ -28,14 +28,6 @@ class TaskTest {
 
     }
 
-    @Test
-    public void testNameException() {
-        try {
-            Task task2 = new Task("",0);
-        } catch (TaskTypeIncorrectException e) {
-            fail("catch a task type exception");
-        }
-    }
 
     @Test
     public void testTypeException() {
