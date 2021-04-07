@@ -2,6 +2,7 @@ package ui;
 
 import model.Task;
 import model.Todolist;
+import model.exceptions.TaskTypeIncorrectException;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
@@ -67,7 +68,11 @@ public class TodoListApp {
         mainPanel.setBackground(Color.white);
         mainPanel.setLayout(null);
         if (flag) {
-            setButtons();
+            try {
+                setButtons();
+            } catch (TaskTypeIncorrectException e) {
+                e.printStackTrace();
+            }
             flag = false;
         }
 
@@ -79,7 +84,7 @@ public class TodoListApp {
 
     // MODIFIES: this
     // EFFECTS: set the positions of buttons of a Gui Frame
-    public void setButtons() {
+    public void setButtons() throws TaskTypeIncorrectException {
         btnAdd.setBounds(300,100,200,35);
         btnDel.setBounds(300,150,200,35);
         btnSave.setBounds(300,200,200,35);
@@ -90,7 +95,13 @@ public class TodoListApp {
         mainPanel.add(btnSave);
         mainPanel.add(btnLoad);
         mainPanel.add(btnView);
-        btnAdd.addActionListener(e -> addATask());
+        btnAdd.addActionListener(e -> {
+            try {
+                addATask();
+            } catch (TaskTypeIncorrectException taskTypeIncorrectException) {
+                taskTypeIncorrectException.printStackTrace();
+            }
+        });
         btnDel.addActionListener(e -> deleteATask());
         btnSave.addActionListener(e -> saveTasks());
         btnLoad.addActionListener(e -> loadAllTasks());
@@ -422,17 +433,21 @@ public class TodoListApp {
 
     // MODIFIES: this
     // EFFECTS: add a new task to todolist
-    public void addATask() {
+    public void addATask() throws TaskTypeIncorrectException {
         JFrame addTaskFrame = new JFrame("Add a task");
         refreshText();
-        addTaskFrame.setLocationRelativeTo(frame);
+        //addTaskFrame.setLocationRelativeTo(frame);
+        setAddTaskFrame(addTaskFrame);
         JButton nextButton = new JButton("Next");
         JButton backButton = new JButton("Cancel");
         addTaskFrame.setLayout(new BorderLayout());
         nextButton.addActionListener(e -> {
-            addANewTask(nameText.getText(), typeText.getText(), detailText.getText());
+            try {
+                addANewTask(nameText.getText(), typeText.getText(), detailText.getText());
+            } catch (TaskTypeIncorrectException taskTypeIncorrectException) {
+                taskTypeIncorrectException.printStackTrace();
+            }
             addTaskFrame.dispose();
-            System.out.println("dispose successfully");
         });
         backButton.addActionListener(e -> addTaskFrame.dispose());
         JPanel lowerPanel = new JPanel();
@@ -443,10 +458,19 @@ public class TodoListApp {
         lowerPanel.add(backButton);
         addTaskFrame.add(centerPanel,BorderLayout.CENTER);
         addTaskFrame.add(lowerPanel,BorderLayout.SOUTH);
-        addTaskFrame.setSize(350,200);
-        addTaskFrame.setVisible(true);
+        //addTaskFrame.setSize(350,200);
+        //addTaskFrame.setVisible(true);
 
     }
+
+    // MODIFIES: this, JFrame
+    // EFFECTS: set the JFrame
+    public void setAddTaskFrame(JFrame addTaskFrame) {
+        addTaskFrame.setLocationRelativeTo(frame);
+        addTaskFrame.setSize(350,200);
+        addTaskFrame.setVisible(true);
+    }
+
 
     // MODIFIES: this
     // EFFECTS: refresh the test column
@@ -481,11 +505,15 @@ public class TodoListApp {
 
     // MODIFIES: this
     // EFFECTS: add a new task to todolist
-    public void addANewTask(String name, String type, String description) {
+    public void addANewTask(String name, String type, String description) throws TaskTypeIncorrectException {
         try {
             int intType = Integer.valueOf(type).intValue();
-            todolist.addTask(name, intType);
-            todolist.addDescription(name,description);
+            if (! (intType == 0 || intType == 1 ||  intType == 2 || intType == 3)) {
+                throw new TaskTypeIncorrectException("incorrect task type");
+            } else {
+                todolist.addTask(name, intType);
+                todolist.addDescription(name, description);
+            }
         } catch (NumberFormatException e) {
             System.out.println("format error");
         }
@@ -511,7 +539,7 @@ public class TodoListApp {
 
     // MODIFIES: this
     // EFFECTS: processes user input
-    private void runTodolist() {
+    private void runTodolist() throws TaskTypeIncorrectException {
         boolean keepGoing = true;
         String command;
 
@@ -534,7 +562,7 @@ public class TodoListApp {
 
     // MODIFIES: this
     // EFFECTS: processes user command
-    private void processCommand(String command) {
+    private void processCommand(String command) throws TaskTypeIncorrectException {
         if (command.equals("add")) {
             addTaskToList();
         } else if (command.equals("delete")) {
@@ -578,7 +606,7 @@ public class TodoListApp {
 
     // MODIFIES: this
     // EFFECTS: add a new task to the todolist
-    private void addTaskToList() {
+    private void addTaskToList() throws TaskTypeIncorrectException {
         System.out.println("please input the title of the task:");
         String name = input.nextLine();
         System.out.println("please select the type of the task:");
@@ -587,8 +615,14 @@ public class TodoListApp {
         System.out.println("2 : not important but urgent");
         System.out.println("3 : not important and not urgent");
         String type = input.nextLine();
-        todolist.addTask(name, Integer.parseInt(type));
+        int intType = Integer.parseInt(type);
+        if (! (intType == 0 || intType == 1 || intType == 2 ||  intType == 3)) {
+            throw new TaskTypeIncorrectException("incorrect task type");
+        } else {
+            todolist.addTask(name, intType);
+        }
     }
+
 
     // MODIFIES: this
     // EFFECTS: delete a task from the todolist
@@ -646,15 +680,19 @@ public class TodoListApp {
     }
 
     // EFFECTS: view tasks of certain status
-    public void viewSingleTask() {
+    public void viewSingleTask() throws TaskTypeIncorrectException {
         System.out.println("please input the title of task you want to view");
         String name = input.nextLine();
         if (todolist.containTask(name)) {
             Task result = todolist.getTask(name);
-
-            System.out.println("Task : " + name + ", Type: " + result.getType()
-                    + ", Status: " + result.getStatus()
-                    + ", Description: " + result.getDescription());
+            int resultType = result.getType();
+            if (! (resultType == 0 || resultType == 1 || resultType == 2 || resultType == 3)) {
+                throw new TaskTypeIncorrectException("incorrect type");
+            } else {
+                System.out.println("Task : " + name + ", Type: " + result.getType()
+                        + ", Status: " + result.getStatus()
+                        + ", Description: " + result.getDescription());
+            }
         } else {
             System.out.println("The todolist doesn't contain this task.");
         }

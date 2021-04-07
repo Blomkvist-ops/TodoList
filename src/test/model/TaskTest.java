@@ -1,6 +1,7 @@
 package model;
 
 
+import model.exceptions.TaskTypeIncorrectException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,7 +10,11 @@ class TaskTest {
 
     @Test
     public void testConstructor() {
-       task = new Task("test task",0);
+       try {
+           task = new Task("test task",0);
+       } catch (TaskTypeIncorrectException e) {
+           fail("catch a task type exception");
+       }
        task.setDescription("this is a simple task");
        assertEquals(0,task.getType());
        assertEquals(0,task.getStatus());
@@ -21,6 +26,36 @@ class TaskTest {
        assertEquals("this is a simple task", task.getDescription());
 
 
+    }
+
+    @Test
+    public void testNameException() {
+        try {
+            Task task2 = new Task("",0);
+        } catch (TaskTypeIncorrectException e) {
+            fail("catch a task type exception");
+        }
+    }
+
+    @Test
+    public void testTypeException() {
+        try {
+            Task task3 = new Task("test",4);
+        } catch (TaskTypeIncorrectException e) {
+            //
+        } try {
+            Task task4 = new Task("aaa",-1);
+        } catch (TaskTypeIncorrectException e) {
+            //
+        } try {
+            Task task5 = new Task("aaa",0);
+        }  catch (TaskTypeIncorrectException e) {
+            fail("catch a task name exception");
+        } try {
+            Task task6 = new Task("bbb",3);
+        } catch (TaskTypeIncorrectException e) {
+            fail("catch a task name exception");
+        }
     }
 
 

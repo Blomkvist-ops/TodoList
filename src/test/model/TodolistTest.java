@@ -1,5 +1,6 @@
 package model;
 
+import model.exceptions.TaskTypeIncorrectException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,10 +15,26 @@ public class TodolistTest {
     @BeforeEach
     public void runBefore() {
         todolist = new Todolist("Testlist");
-        todolist.addTask("AAA", 0);
-        todolist.addTask("BBB", 1);
-        todolist.addTask("CCC", 2);
-        todolist.addTask("DDD", 3);
+        try {
+            todolist.addTask("AAA", 0);
+        } catch (TaskTypeIncorrectException e) {
+            fail("incorrect type");
+        }
+        try {
+            todolist.addTask("BBB", 1);
+        } catch (TaskTypeIncorrectException e) {
+            fail("incorrect type");
+        }
+        try {
+            todolist.addTask("CCC", 2);
+        } catch (TaskTypeIncorrectException e) {
+            fail("incorrect type");
+        }
+        try {
+            todolist.addTask("DDD", 3);
+        } catch (TaskTypeIncorrectException e) {
+            fail("incorrect type");
+        }
     }
 
     @Test
@@ -27,7 +44,11 @@ public class TodolistTest {
 
     @Test
     public void testAddTask() {
-        todolist.addTask("FFF", 2);
+        try {
+            todolist.addTask("FFF", 2);
+        } catch (TaskTypeIncorrectException e) {
+            fail("incorrect type");
+        }
         assertEquals(5, todolist.getNumberOfAllTask());
     }
 
@@ -86,7 +107,11 @@ public class TodolistTest {
         boolean result2 = todolist.addDescription("MMM", "this task doesn't exist");
         assertTrue(result1);
         assertFalse(result2);
-        assertEquals("This is a nice task", todolist.getTask("AAA").getDescription());
+        try {
+            assertEquals("This is a nice task", todolist.getTask("AAA").getDescription());
+        } catch (TaskTypeIncorrectException e) {
+            fail("incorrect type");
+        }
     }
 
     @Test
@@ -109,8 +134,16 @@ public class TodolistTest {
 
     @Test
     public void testGetTask() {
-        assertEquals("BBB", todolist.getTask("BBB").getName());
-        assertEquals(null, todolist.getTask("ZZZ").getName());
+        try {
+            assertEquals("BBB", todolist.getTask("BBB").getName());
+        } catch (TaskTypeIncorrectException e) {
+            fail("incorrect type");
+        }
+        try {
+            assertEquals(null, todolist.getTask("ZZZ").getName());
+        } catch (TaskTypeIncorrectException e) {
+            fail("incorrect type");
+        }
     }
 
 

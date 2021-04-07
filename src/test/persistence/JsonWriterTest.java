@@ -1,6 +1,7 @@
 package persistence;
 
 import model.Todolist;
+import model.exceptions.TaskTypeIncorrectException;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -57,7 +58,7 @@ public class JsonWriterTest extends JsonTest {
             assertEquals(0,tl.getTask("AAA").getType());
             assertEquals(1,tl.getTask("BBB").getType());
 
-        } catch (IOException e) {
+        } catch (IOException | TaskTypeIncorrectException e) {
             fail("Exception should not have been thrown");
         }
     }

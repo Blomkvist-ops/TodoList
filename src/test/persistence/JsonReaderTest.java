@@ -1,6 +1,7 @@
 package persistence;
 
 import model.Todolist;
+import model.exceptions.TaskTypeIncorrectException;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -39,8 +40,16 @@ public class JsonReaderTest {
             Todolist tl = reader.read();
             assertEquals("My todolist", tl.getName());
             assertEquals(2, tl.getNumberOfAllTask());
-            assertEquals(0, tl.getTask("AAA").getType());
-            assertEquals(1, tl.getTask("BBB").getType());
+            try {
+                assertEquals(0, tl.getTask("AAA").getType());
+            } catch (TaskTypeIncorrectException e) {
+                fail("incorrect type");
+            }
+            try {
+                assertEquals(1, tl.getTask("BBB").getType());
+            } catch (TaskTypeIncorrectException e) {
+                fail("incorrect type");
+            }
         } catch (IOException e) {
             fail("Couldn't read from file");
         }

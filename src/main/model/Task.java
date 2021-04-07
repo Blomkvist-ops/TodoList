@@ -1,5 +1,6 @@
 package model;
 
+import model.exceptions.TaskTypeIncorrectException;
 import org.json.JSONObject;
 import persistence.Writable;
 
@@ -15,10 +16,14 @@ public class Task implements Writable {
     //         type = 1 means this task is important but not urgent;
     //         type = 2 means this task is not important but urgent;
     //         type = 3 means this task is not important and not urgent.
-    public Task(String name, int type) {
-        this.name = name;
-        this.type = type;
-        this.status = 0;
+    public Task(String name, int type) throws TaskTypeIncorrectException {
+        if (!(type == 0 || type == 1 || type == 2 || type == 3)) {
+            throw new TaskTypeIncorrectException("Incorrect Task Type");
+        } else {
+            this.name = name;
+            this.type = type;
+            this.status = 0;
+        }
 
     }
 

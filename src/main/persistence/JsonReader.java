@@ -1,6 +1,7 @@
 package persistence;
 
 import model.Todolist;
+import model.exceptions.TaskTypeIncorrectException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -53,15 +54,24 @@ public class JsonReader {
         JSONArray jsonArray = jsonObject.getJSONArray("todolist");
         for (Object json : jsonArray) {
             JSONObject nextTask = (JSONObject) json;
-            addTask(tl, nextTask);
+            try {
+                addTask(tl, nextTask);
+            } catch (TaskTypeIncorrectException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     // MODIFIES: tl
     // EFFECTS: parses thingy from JSON object and adds it to todolist
-    private void addTask(Todolist tl, JSONObject jsonObject) {
+    private void addTask(Todolist tl, JSONObject jsonObject) throws TaskTypeIncorrectException {
         String name = jsonObject.getString("name");
         int type = valueOf(jsonObject.getString("type"));
-        tl.addTask(name, type);
+        if (! (type == 0 || type == 1 || type == 2 || type == 3)) {
+            throw new TaskTypeIncorrectException("incorrect type");
+        } else {
+            tl.addTask(name, type);
+        }
+
     }
 }

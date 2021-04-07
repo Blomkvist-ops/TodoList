@@ -1,5 +1,6 @@
 package model;
 
+import model.exceptions.TaskTypeIncorrectException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
@@ -23,8 +24,12 @@ public class Todolist implements Writable {
 
     //MODIFIES: this
     //EFFECTS: add a new task to the todolist
-    public void addTask(String name, int type) {
-        todolist.add(new Task(name, type));
+    public void addTask(String name, int type) throws TaskTypeIncorrectException {
+        if (!(type == 0 || type == 1 || type == 2 || type == 3)) {
+            throw new TaskTypeIncorrectException("Incorrect Task Type");
+        } else {
+            todolist.add(new Task(name, type));
+        }
     }
 
     //MODIFIES: this
@@ -151,19 +156,27 @@ public class Todolist implements Writable {
         return result;
     }
 
-    //EFFECTS: view complete and incomplete tasks
-    public Task getTask(String name) {
-        Task result = new Task(null,0);
-        for (Task task: todolist) {
-            if (!Objects.equals(name, task.getName())) {
-                continue;
-            } else {
-                result = task;
-                break;
+    //EFFECTS: return a task by name
+    public Task getTask(String name) throws TaskTypeIncorrectException {
+
+        Task result = new Task(null, 0);
+        int resultType = result.getType();
+        if (!(resultType == 0 || resultType == 1 || resultType == 2 || resultType == 3)) {
+            throw new TaskTypeIncorrectException("incorrect type");
+        } else {
+            for (Task task : todolist) {
+                if (!Objects.equals(name, task.getName())) {
+                    continue;
+                } else {
+                    result = task;
+                    break;
+                }
+
+
             }
+            return result;
 
         }
-        return result;
     }
 
 
