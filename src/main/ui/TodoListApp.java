@@ -290,49 +290,7 @@ public class TodoListApp {
 
 
     // MODIFIES: this
-    // EFFECTS: set the frame of loading tasks
-    public void showTaskFrame() {
-        JFrame loadFrame = new JFrame("Load all tasks");
-        loadFrame.setLocationRelativeTo(frame);
-        JButton backButton = new JButton("Cancel");
-        loadFrame.setLayout(new BorderLayout());
-        backButton.addActionListener(e -> loadFrame.dispose());
-        JPanel lowerPanel =  new JPanel();
-        JPanel centerPanel = new JPanel();
-        lowerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        lowerPanel.add(backButton);
-        loadFrame.add(centerPanel,BorderLayout.CENTER);
-        loadFrame.add(lowerPanel,BorderLayout.SOUTH);
-        loadFrame.setSize(650,323);
-        loadFrame.setVisible(true);
-
-    }
-
-
-    // MODIFIES: this, JPanel !!!
-    // EFFECTS: return the center panel of the main frame, containing a table of to-do list
-    public JPanel getToDoListPanel() {
-        JPanel panel = new JPanel();
-        if (todolist.getNumberOfAllTask() == 0) {
-            JLabel label = new JLabel("There is no task yet.");
-            panel.add(label);
-        } else {
-            JTable table = getTaskTable();
-            panel.add(new JScrollPane(table) {
-                public Dimension getPreferredSize() {
-                    return new Dimension(650, 323);
-                }
-            });
-        }
-
-
-        return panel;
-    }
-
-
-    // MODIFIES: this
     // EFFECTS: return a JTable of all to-do list
-
     public JTable getTaskTable() {
         JPanel panel = new JPanel();
         DefaultTableModel tableModel = new DefaultTableModel();

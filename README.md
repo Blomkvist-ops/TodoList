@@ -35,3 +35,15 @@ _**Task Types:**_
 - As a user, I want to be able to see the title of incomplete and completed tasks on my to-do list
 - As a user, I want to be able to save my to-do list to file
 - As a user, I want to be able to be able to load my to-do list from file 
+
+
+Phase 4: Task 2
+- I have tested and designed the Task class in my model package that is robust. The task constructor method is robust.
+- I have one test for the case where the TaskTypeIncorrectException is expected and another where the exception is not expected.
+
+
+Phase 4: Task 3
+- I will split this class into several subclasses to increase the readability of the code.
+- I will create a TodolistPanel class to deal with the interactive interface rather than put them all in the TodoListApp Class
+- I will use abstract class more to reduce the code duplication
+- I will use hashMap to store more todo lists, now it only has one todolist
