@@ -44,8 +44,8 @@ public class JsonWriterTest extends JsonTest {
     void testWriterGeneralTodolist() {
         try {
             Todolist tl = new Todolist("My todolist");
-            tl.addTask("AAA",0);
-            tl.addTask("BBB",1);
+            tl.addTask("AAA", 0);
+            tl.addTask("BBB", 1);
             JsonWriter writer = new JsonWriter("./data/testWriterGeneralTodolist.json");
             writer.open();
             writer.write(tl);
@@ -55,8 +55,8 @@ public class JsonWriterTest extends JsonTest {
             tl = reader.read();
             assertEquals("My todolist", tl.getName());
             assertEquals(2, tl.getNumberOfAllTask());
-            assertEquals(0,tl.getTask("AAA").getType());
-            assertEquals(1,tl.getTask("BBB").getType());
+            assertEquals(0, tl.getTask("AAA").getType());
+            assertEquals(1, tl.getTask("BBB").getType());
 
         } catch (IOException | TaskTypeIncorrectException e) {
             fail("Exception should not have been thrown");

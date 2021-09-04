@@ -57,7 +57,7 @@ public class TodolistTest {
         boolean result;
         result = todolist.removeTask("AAA");
         assertTrue(result);
-        assertEquals(3,todolist.getNumberOfAllTask());
+        assertEquals(3, todolist.getNumberOfAllTask());
         result = todolist.removeTask("AAA");
         assertFalse(result);
         assertFalse(todolist.containTask("AAA"));
@@ -65,10 +65,10 @@ public class TodolistTest {
 
     @Test
     public void testCompleteTask() {
-        assertEquals(4,todolist.getNumberOfIncompleteTask());
+        assertEquals(4, todolist.getNumberOfIncompleteTask());
         boolean result = todolist.completeTask("BBB");
-        assertEquals(3,todolist.getNumberOfIncompleteTask());
-        assertEquals(1,todolist.getNumberOfCompleteTask());
+        assertEquals(3, todolist.getNumberOfIncompleteTask());
+        assertEquals(1, todolist.getNumberOfCompleteTask());
         assertTrue(result);
         result = todolist.completeTask("ZZZ");
         assertFalse(result);
@@ -77,16 +77,16 @@ public class TodolistTest {
 
     @Test
     public void testDoingTask() {
-        assertEquals(4,todolist.getNumberOfIncompleteTask());
-        assertEquals(0,todolist.getNumberOfOngoingTask());
+        assertEquals(4, todolist.getNumberOfIncompleteTask());
+        assertEquals(0, todolist.getNumberOfOngoingTask());
         boolean result1 = todolist.doingTask("CCC");
         boolean result2 = todolist.doingTask("AAA");
         boolean result3 = todolist.doingTask("ZZZ");
         assertTrue(result1);
         assertTrue(result2);
         assertFalse(result3);
-        assertEquals(4,todolist.getNumberOfIncompleteTask());
-        assertEquals(2,todolist.getNumberOfOngoingTask());
+        assertEquals(4, todolist.getNumberOfIncompleteTask());
+        assertEquals(2, todolist.getNumberOfOngoingTask());
     }
 
 
@@ -145,7 +145,6 @@ public class TodolistTest {
             fail("incorrect type");
         }
     }
-
 
 
 }

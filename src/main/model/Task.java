@@ -50,7 +50,6 @@ public class Task implements Writable {
     }
 
 
-
     //EFFECTS: get the name of this task
     public String getName() {
         return name;

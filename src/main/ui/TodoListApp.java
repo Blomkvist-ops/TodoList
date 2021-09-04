@@ -30,7 +30,7 @@ public class TodoListApp {
     private static final Integer WIDTH = 800;
     private static final Integer HEIGHT = 500;
     private JTextField nameText = new JTextField(20);
-    private JTextField  typeText = new JTextField(20);
+    private JTextField typeText = new JTextField(20);
     private JTextArea detailText = new JTextArea();
     private JButton btnAdd = new JButton("Add");    //创建JButton对象
     private JButton btnDel = new JButton("Delete");
@@ -61,7 +61,7 @@ public class TodoListApp {
     // EFFECTS: create a Gui Frame
     public void createGui() {
         frame = new JFrame("Todo List Application");
-        frame.setSize(WIDTH,HEIGHT);    //设置窗口显示尺寸
+        frame.setSize(WIDTH, HEIGHT);    //设置窗口显示尺寸
         JLabel title = new JLabel(todolist.getName());
         title.setHorizontalAlignment(SwingConstants.CENTER);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    //置窗口是否可以关闭
@@ -85,11 +85,11 @@ public class TodoListApp {
     // MODIFIES: this
     // EFFECTS: set the positions of buttons of a Gui Frame
     public void setButtons() throws TaskTypeIncorrectException {
-        btnAdd.setBounds(300,100,200,35);
-        btnDel.setBounds(300,150,200,35);
-        btnSave.setBounds(300,200,200,35);
-        btnLoad.setBounds(300,250,200,35);
-        btnView.setBounds(300, 300,200,35);
+        btnAdd.setBounds(300, 100, 200, 35);
+        btnDel.setBounds(300, 150, 200, 35);
+        btnSave.setBounds(300, 200, 200, 35);
+        btnLoad.setBounds(300, 250, 200, 35);
+        btnView.setBounds(300, 300, 200, 35);
         mainPanel.add(btnAdd);
         mainPanel.add(btnDel);
         mainPanel.add(btnSave);
@@ -107,7 +107,6 @@ public class TodoListApp {
         btnLoad.addActionListener(e -> loadAllTasks());
         btnView.addActionListener(e -> viewTaskPanel());
     }
-
 
 
     // MODIFIES: this
@@ -129,9 +128,9 @@ public class TodoListApp {
         lowerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         lowerPanel.add(nextButton);
         lowerPanel.add(backButton);
-        viewTaskFrame.add(centerPanel2,BorderLayout.CENTER);
-        viewTaskFrame.add(lowerPanel,BorderLayout.SOUTH);
-        viewTaskFrame.setSize(350,200);
+        viewTaskFrame.add(centerPanel2, BorderLayout.CENTER);
+        viewTaskFrame.add(lowerPanel, BorderLayout.SOUTH);
+        viewTaskFrame.setSize(350, 200);
         viewTaskFrame.setVisible(true);
 
     }
@@ -166,8 +165,8 @@ public class TodoListApp {
     public JPanel setViewTaskCenterPanel(JPanel centerPanel) {
         JLabel typeLabel = new JLabel("Type");
         centerPanel.setLayout(null);
-        typeText.setBounds(100,45,165,20);
-        typeLabel.setBounds(10,45,165,20);
+        typeText.setBounds(100, 45, 165, 20);
+        typeLabel.setBounds(10, 45, 165, 20);
         centerPanel.add(typeText);
         centerPanel.add(typeLabel);
         return centerPanel;
@@ -188,10 +187,10 @@ public class TodoListApp {
         JPanel lowerPanel = new JPanel();
         lowerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         lowerPanel.add(backButton);
-        viewTaskFrame.add(viewTaskLabel,BorderLayout.NORTH);
-        viewTaskFrame.add(centerPanel,BorderLayout.CENTER);
-        viewTaskFrame.add(lowerPanel,BorderLayout.SOUTH);
-        viewTaskFrame.setSize(600,350);
+        viewTaskFrame.add(viewTaskLabel, BorderLayout.NORTH);
+        viewTaskFrame.add(centerPanel, BorderLayout.CENTER);
+        viewTaskFrame.add(lowerPanel, BorderLayout.SOUTH);
+        viewTaskFrame.setSize(600, 350);
         viewTaskFrame.setVisible(true);
     }
 
@@ -208,9 +207,9 @@ public class TodoListApp {
         lowerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         lowerPanel.add(backButton);
         //viewTaskFrame.add(viewTaskLabel,BorderLayout.NORTH);
-        viewTaskFrame.add(centerPanel,BorderLayout.CENTER);
-        viewTaskFrame.add(lowerPanel,BorderLayout.SOUTH);
-        viewTaskFrame.setSize(600,350);
+        viewTaskFrame.add(centerPanel, BorderLayout.CENTER);
+        viewTaskFrame.add(lowerPanel, BorderLayout.SOUTH);
+        viewTaskFrame.setSize(600, 350);
         viewTaskFrame.setVisible(true);
     }
 
@@ -220,17 +219,18 @@ public class TodoListApp {
     public JPanel getToDoListPanelByType(String type) {
         JPanel panel = new JPanel();
         DefaultTableModel tableModel = new DefaultTableModel();
-        JTable table = new JTable(tableModel) { public boolean isCellEditable(int row, int column) {
+        JTable table = new JTable(tableModel) {
+            public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
         tableModel.setRowCount(0);
-        tableModel.setColumnIdentifiers(new Object[]{"Name","Description","Type"});
+        tableModel.setColumnIdentifiers(new Object[]{"Name", "Description", "Type"});
         ArrayList<Task> tasks = todolist.getTasks();
         int intType = Integer.valueOf(type).intValue();
         tasks.forEach(task -> {
             if (intType == task.getType()) {
-                tableModel.addRow(new Object[]{task.getName(),task.getDescription(), task.getType()});
+                tableModel.addRow(new Object[]{task.getName(), task.getDescription(), task.getType()});
             }
         });
         table.setRowHeight(30);
@@ -248,15 +248,16 @@ public class TodoListApp {
     public JPanel getWholeToDoList() {
         JPanel panel = new JPanel();
         DefaultTableModel tableModel = new DefaultTableModel();
-        JTable table = new JTable(tableModel) { public boolean isCellEditable(int row, int column) {
+        JTable table = new JTable(tableModel) {
+            public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
         tableModel.setRowCount(0);
-        tableModel.setColumnIdentifiers(new Object[]{"Name","Description","Type"});
+        tableModel.setColumnIdentifiers(new Object[]{"Name", "Description", "Type"});
         ArrayList<Task> tasks = todolist.getTasks();
         tasks.forEach(task -> {
-            tableModel.addRow(new Object[]{task.getName(),task.getDescription(), task.getType()});
+            tableModel.addRow(new Object[]{task.getName(), task.getDescription(), task.getType()});
 
         });
         table.setRowHeight(30);
@@ -288,7 +289,6 @@ public class TodoListApp {
     }
 
 
-
     // MODIFIES: this
     // EFFECTS: return a JTable of all to-do list
     public JTable getTaskTable() {
@@ -300,10 +300,10 @@ public class TodoListApp {
             }
         };
         tableModel.setRowCount(0);
-        tableModel.setColumnIdentifiers(new Object[]{"Name","Description","Type"});
+        tableModel.setColumnIdentifiers(new Object[]{"Name", "Description", "Type"});
         ArrayList<Task> tasks = todolist.getTasks();
         tasks.forEach(task -> {
-            tableModel.addRow(new Object[]{task.getName(),task.getDescription(), task.getType()});
+            tableModel.addRow(new Object[]{task.getName(), task.getDescription(), task.getType()});
         });
         table.setRowHeight(30);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
@@ -330,7 +330,7 @@ public class TodoListApp {
         if (save == 0) {
             playSound("click");
             saveTodolist();
-            JOptionPane.showMessageDialog(savePanel,"Saved " + todolist.getName() + " to " + JSON_STORE,
+            JOptionPane.showMessageDialog(savePanel, "Saved " + todolist.getName() + " to " + JSON_STORE,
                     "Successfully Saved", JOptionPane.INFORMATION_MESSAGE);
         }
     }
@@ -355,9 +355,9 @@ public class TodoListApp {
         lowerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         lowerPanel.add(nextButton);
         lowerPanel.add(backButton);
-        deleteTaskFrame.add(centerPanel,BorderLayout.CENTER);
-        deleteTaskFrame.add(lowerPanel,BorderLayout.SOUTH);
-        deleteTaskFrame.setSize(350,200);
+        deleteTaskFrame.add(centerPanel, BorderLayout.CENTER);
+        deleteTaskFrame.add(lowerPanel, BorderLayout.SOUTH);
+        deleteTaskFrame.setSize(350, 200);
         deleteTaskFrame.setVisible(true);
 
     }
@@ -367,8 +367,8 @@ public class TodoListApp {
     public JPanel setDeleteCenterPanel(JPanel centerPanel) {
         JLabel nameLabel = new JLabel("Delete Name");
         centerPanel.setLayout(null);
-        nameText.setBounds(100,20,165,20);
-        nameLabel.setBounds(10,20,165,20);
+        nameText.setBounds(100, 20, 165, 20);
+        nameLabel.setBounds(10, 20, 165, 20);
         centerPanel.add(nameText);
         centerPanel.add(nameLabel);
         return centerPanel;
@@ -414,8 +414,8 @@ public class TodoListApp {
         lowerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         lowerPanel.add(nextButton);
         lowerPanel.add(backButton);
-        addTaskFrame.add(centerPanel,BorderLayout.CENTER);
-        addTaskFrame.add(lowerPanel,BorderLayout.SOUTH);
+        addTaskFrame.add(centerPanel, BorderLayout.CENTER);
+        addTaskFrame.add(lowerPanel, BorderLayout.SOUTH);
         //addTaskFrame.setSize(350,200);
         //addTaskFrame.setVisible(true);
 
@@ -425,7 +425,7 @@ public class TodoListApp {
     // EFFECTS: set the JFrame
     public void setAddTaskFrame(JFrame addTaskFrame) {
         addTaskFrame.setLocationRelativeTo(frame);
-        addTaskFrame.setSize(350,200);
+        addTaskFrame.setSize(350, 200);
         addTaskFrame.setVisible(true);
     }
 
@@ -446,12 +446,12 @@ public class TodoListApp {
         JLabel typeLabel = new JLabel("Type");
         JLabel descriptionLabel = new JLabel("Description");
         centerPanel.setLayout(null);
-        nameText.setBounds(100,20,165,20);
-        typeText.setBounds(100,45,165,20);
-        detailText.setBounds(100,70,165,50);
-        nameLabel.setBounds(10,20,165,20);
-        typeLabel.setBounds(10,45,165,20);
-        descriptionLabel.setBounds(10,70,165,50);
+        nameText.setBounds(100, 20, 165, 20);
+        typeText.setBounds(100, 45, 165, 20);
+        detailText.setBounds(100, 70, 165, 50);
+        nameLabel.setBounds(10, 20, 165, 20);
+        typeLabel.setBounds(10, 45, 165, 20);
+        descriptionLabel.setBounds(10, 70, 165, 50);
         centerPanel.add(nameText);
         centerPanel.add(typeText);
         centerPanel.add(detailText);
@@ -466,7 +466,7 @@ public class TodoListApp {
     public void addANewTask(String name, String type, String description) throws TaskTypeIncorrectException {
         try {
             int intType = Integer.valueOf(type).intValue();
-            if (! (intType == 0 || intType == 1 ||  intType == 2 || intType == 3)) {
+            if (!(intType == 0 || intType == 1 || intType == 2 || intType == 3)) {
                 throw new TaskTypeIncorrectException("incorrect task type");
             } else {
                 todolist.addTask(name, intType);
@@ -574,7 +574,7 @@ public class TodoListApp {
         System.out.println("3 : not important and not urgent");
         String type = input.nextLine();
         int intType = Integer.parseInt(type);
-        if (! (intType == 0 || intType == 1 || intType == 2 ||  intType == 3)) {
+        if (!(intType == 0 || intType == 1 || intType == 2 || intType == 3)) {
             throw new TaskTypeIncorrectException("incorrect task type");
         } else {
             todolist.addTask(name, intType);
@@ -644,7 +644,7 @@ public class TodoListApp {
         if (todolist.containTask(name)) {
             Task result = todolist.getTask(name);
             int resultType = result.getType();
-            if (! (resultType == 0 || resultType == 1 || resultType == 2 || resultType == 3)) {
+            if (!(resultType == 0 || resultType == 1 || resultType == 2 || resultType == 3)) {
                 throw new TaskTypeIncorrectException("incorrect type");
             } else {
                 System.out.println("Task : " + name + ", Type: " + result.getType()

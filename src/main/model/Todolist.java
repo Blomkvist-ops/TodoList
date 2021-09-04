@@ -67,7 +67,7 @@ public class Todolist implements Writable {
     //EFFECTS: set the status of given task as completed and return true; otherwise return false
     public boolean completeTask(String taskToComplete) {
         boolean result = false;
-        for (Task task: todolist) {
+        for (Task task : todolist) {
             if (taskToComplete.equals(task.getName())) {
                 task.setStatus(2);
                 result = true;
@@ -82,7 +82,7 @@ public class Todolist implements Writable {
     //EFFECTS: set the status of given as ongoing
     public boolean doingTask(String taskDoing) {
         boolean result = false;
-        for (Task task: todolist) {
+        for (Task task : todolist) {
             if (taskDoing.equals(task.getName())) {
                 task.setStatus(1);
                 result = true;
@@ -144,11 +144,10 @@ public class Todolist implements Writable {
     }
 
 
-
     //EFFECTS: view complete and incomplete tasks
     public List<String> viewTasks(int status) {
         List<String> result = new ArrayList<>();
-        for (Task task: todolist) {
+        for (Task task : todolist) {
             if (status == task.getStatus()) {
                 result.add(task.getName());
             }
@@ -201,7 +200,6 @@ public class Todolist implements Writable {
     public String getName() {
         return listName;
     }
-
 
 
     // EFFECTS: return the list of tasks in the to-do list

@@ -1,17 +1,17 @@
 {
-    "listName": "My todolist",
-    "todolist": [
-        {
-            "name": "aaa",
-            "description": "qweqweq",
-            "type": "1",
-            "status": "0"
-        },
-        {
-            "name": "1231231321",
-            "description": "weweqweadsasd",
-            "type": "2",
-            "status": "0"
-        }
-    ]
+  "listName": "My todolist",
+  "todolist": [
+    {
+      "name": "aaa",
+      "description": "qweqweq",
+      "type": "1",
+      "status": "0"
+    },
+    {
+      "name": "1231231321",
+      "description": "weweqweadsasd",
+      "type": "2",
+      "status": "0"
+    }
+  ]
 }

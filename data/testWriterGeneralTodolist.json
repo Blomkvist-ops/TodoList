@@ -1,15 +1,15 @@
 {
-    "listName": "My todolist",
-    "todolist": [
-        {
-            "name": "AAA",
-            "type": "0",
-            "status": "0"
-        },
-        {
-            "name": "BBB",
-            "type": "1",
-            "status": "0"
-        }
-    ]
+  "listName": "My todolist",
+  "todolist": [
+    {
+      "name": "AAA",
+      "type": "0",
+      "status": "0"
+    },
+    {
+      "name": "BBB",
+      "type": "1",
+      "status": "0"
+    }
+  ]
 }

@@ -67,7 +67,7 @@ public class JsonReader {
     private void addTask(Todolist tl, JSONObject jsonObject) throws TaskTypeIncorrectException {
         String name = jsonObject.getString("name");
         int type = valueOf(jsonObject.getString("type"));
-        if (! (type == 0 || type == 1 || type == 2 || type == 3)) {
+        if (!(type == 0 || type == 1 || type == 2 || type == 3)) {
             throw new TaskTypeIncorrectException("incorrect type");
         } else {
             tl.addTask(name, type);
